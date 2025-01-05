@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+html {
+    font-size: 10px;
+    line-height: normal;
+}
+
+.input-row{
+    @apply bg-main rounded-[8px] relative text-black flex justify-between items-center py-[1.2rem] px-[1.6rem] z-10
+}
+.input-left{
+    @apply flex flex-col gap-[.4rem]
+}
+
+.input-main{
+    @apply bg-transparent text-[16px] font-semibold leading-[1.2] text-gray-200 appearance-none focus:outline-none
+}
+.input-right{
+    @apply text-white right-0 flex items-center bg-add rounded-[16px] cursor-pointer p-[.4rem]
+}
+
+.adv-wrapper{
+    @apply p-[1.6rem] bg-add rounded-[16px] flex flex-col gap-[1.6rem]
+}
+.adv-img-wrapper{
+    @apply h-[4.8rem] w-[4.8rem]
+}
+.adv-img{
+    @apply h-full w-full
+}
+.adv-text{
+    @apply font-semibold text-[18px] leading-normal
+}
+.adv-p{
+    @apply text-[#b5b8bc] leading-normal text-[1.2rem] font-normal
+}
