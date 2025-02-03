@@ -1,21 +1,23 @@
 import {useDispatch, useSelector} from "react-redux";
 import {
-    fetchCurrencyData,
     setFromCurrency,
     setToCurrency,
     setExchangeRate,
     setFromAmount,
     setToAmount,
-    swapCurrencies
+    swapCurrencies, setStatus, fetchCurrencyData, resetEmailAndWallet, setPromocode, resetAmounts
 } from "../redux/slices/currencySlice";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import triangle from '../svg/triangle.svg'
 import reverse from '../svg/reverse.svg'
 import errorimg from '../svg/error.png'
 import quest from '../svg/quest.svg'
 import course from '../svg/course.png'
 import Overlay from "./Overlay";
+import {Link, useNavigate} from "react-router-dom";
 const Exchange = () => {
+
+
 
 
 
@@ -23,6 +25,12 @@ const Exchange = () => {
     const [visible2, setVisible2] = useState(false)
 
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(fetchCurrencyData())
+        document.getElementById('from-input').value = null
+        document.getElementById('to-input').value = null
+    },[dispatch])
 
     const {
         currencyOptions,
@@ -36,12 +44,12 @@ const Exchange = () => {
 
 
 
-    useEffect(()=>{
-        dispatch(fetchCurrencyData())
-    },[dispatch])
 
     const handleFromAmountChange = (e) =>{
         dispatch(setFromAmount(parseFloat(e.target.value)))
+        if (error){
+            setError(false)
+        }
     }
 
     const handleToAmountChange = (e) =>{
@@ -101,30 +109,109 @@ const Exchange = () => {
         else return 0
     }
 
+    useEffect(() => {
+        const fun = () => {
+            if (visible || visible2) {
+                document.body.style.overflowY = "hidden";
+            } else {
+                document.body.style.overflowY = "auto";
+            }
+        };
 
-  return(
-      <div className={'flex flex-col items-center w-full py-[32px] px-[16px] rounded-[16px] bg-add text-white gap-[1.6rem]'}>
+        fun();
+
+        // Чистим стили при размонтировании
+        return () => {
+            document.body.style.overflowY = "auto";
+        };
+    }, [visible, visible2]);
+
+    const [searchValue, setSearchValue] = useState('');
+    const [filteredCoins, setFilteredCoins] = useState(currencyOptions);
+
+    useEffect(() => {
+        setFilteredCoins(currencyOptions);
+    }, [currencyOptions]);
+    const handleSearchChange = (e) => {
+
+        const searchValue = e.target.value;
+        setSearchValue(searchValue);
+        const filteredCoins = currencyOptions.filter((coin) => {
+            const coinName = coin.name.toLowerCase();
+            const coinSymbol = coin.symbol.toLowerCase();
+            const searchValueLower = searchValue.toLowerCase();
+            return coinName.includes(searchValueLower) || coinSymbol.includes(searchValueLower);
+        });
+        setFilteredCoins(filteredCoins);
+    };
+
+    const handleSearchChange2 = (e) => {
+
+        const searchValue = e.target.value;
+        setSearchValue(searchValue);
+        const filteredCoins2 = currencyOptions.filter((coin) => {
+            const coinName = coin.name.toLowerCase();
+            const coinSymbol = coin.symbol.toLowerCase();
+            const searchValueLower = searchValue.toLowerCase();
+            return coinName.includes(searchValueLower) || coinSymbol.includes(searchValueLower);
+        });
+        setFilteredCoins(filteredCoins2);
+    };
+
+    let navigate = useNavigate();
+
+    const [error, setError] = useState(false)
+    const inputRef = useRef(null);
+
+    const handleNavigation = () =>{
+        if (fromAmount === 0 || fromAmount === '' || isNaN(fromAmount) || fromAmount === null){
+            setError(true)
+            inputRef.current.focus();
+        }
+        else {
+            dispatch(setPromocode(promo))
+            dispatch(resetEmailAndWallet())
+            dispatch(setStatus(0))
+            navigate('/transaction')
+        }
+    }
+
+    const [promo, setPromo] = useState('')
+    const handlePromoInput = (e) => {
+        const inputValue = e.target.value;
+        setPromo(inputValue);
+    };
+
+
+    return(
+      <div className={'flex flex-col items-center w-full py-[32px] px-[16px] rounded-[16px] bg-add text-white gap-[1.6rem] md:p-[3.2rem] md:w-[58.8rem]'}>
           <Overlay
               handleVisibilityClick={handleVisibilityClick}
               currencyOptions={currencyOptions}
               visible={visible}
               handleChangeClick={handleFromCurrencyChange}
+              searchValue={searchValue}
+              handleSearch={handleSearchChange}
+              filtered={filteredCoins}
           />
           <Overlay
               handleVisibilityClick={handleVisibilityClick2}
               currencyOptions={currencyOptions}
               visible={visible2}
               handleChangeClick={handleToCurrencyChange}
+              searchValue={searchValue}
+              handleSearch={handleSearchChange2}
+              filtered={filteredCoins}
           />
           <div className={'text-[2.2rem] font-semibold'}>Калькулятор</div>
           <div className={'flex flex-col gap-[.8rem] relative w-full'}>
-              <div className={'input-row'}>
+              <div className={`input-row ${error ? 'border-red-600 border border-solid' : ''}`}>
                   <div className={'input-left'}>
                       <span className={'text-gray-400 text-[1.2rem] font-medium'}>
                           Отдаёте
                       </span>
-                      <input className={'input-main'}
-                             type="number" value={fromAmount} onChange={handleFromAmountChange} onKeyDown={handleKeyPress} placeholder={'0'}/>
+                      <input id={'from-input'} className={'input-main'}
+                            ref={inputRef} type="number" value={fromAmount} onChange={handleFromAmountChange} onKeyDown={handleKeyPress} placeholder={'0'}/>
                   </div>
 
                   <div className={'input-right'} onClick={()=>setVisible(true)}>
@@ -141,7 +228,7 @@ const Exchange = () => {
                         <span className={'text-gray-400 text-[1.2rem] font-medium'}>
                       Получаете
                   </span>
-                        <input className={'input-main'} type="number" value={toAmount} onChange={handleToAmountChange} onKeyDown={handleKeyPress}/>
+                        <input id={'to-input'} className={'input-main'} type="number" value={toAmount} onChange={handleToAmountChange} onKeyDown={handleKeyPress}/>
                   </div>
                   <div className={'input-right'} onClick={() => setVisible2(true)}>
                       <img className={'h-[2.8rem] w-[2.8rem] mr-[.8rem]'} src={toCurrency.icon} alt={toCurrency.icon}/>
@@ -174,9 +261,9 @@ const Exchange = () => {
               </div>
               <div className={'flex items-center'}>
                   <img className={'w-[2.4rem] h-[2.4rem]'} src={quest} alt={quest}/>
-                  <span className={'ml-[.4rem]'}>
+                  <Link to={'/discount'} className={'ml-[.4rem]'}>
                       Скидка
-                  </span>
+                  </Link>
                   <span className={'ml-auto'}>{discount(fromAmount)}%</span>
               </div>
 
@@ -184,18 +271,17 @@ const Exchange = () => {
           </div>
           <div className={'w-full'}>
               <div className={'bg-main rounded-[8px] h-[5.2rem] px-[2.4rem]'}>
-                  <input className={'bg-transparent w-full h-full focus:outline-none font-medium leading-[1]'} placeholder={'Промокод, необязательно'}/>
+                  <input onInput={handlePromoInput} className={'bg-transparent w-full h-full focus:outline-none font-medium leading-[1]'} placeholder={'Промокод, необязательно'}/>
               </div>
-              <span className={'text-[#4683df] cursor-pointer text-[1.2rem] leading-[1.2] pl-[2.4rem] pb-[.8rem] font-medium'}>
-                  Как получить промокод?
-              </span>
           </div>
 
-          <button className={'bg-[#4683df] w-full rounded-[8px] text-[1.6rem] h-[5.2rem] px-[2rem]'}>
+
+          <button onClick={handleNavigation} className={'bg-[#4683df] w-full rounded-[8px] text-[1.6rem] h-[5.2rem] px-[2rem]'}>
               <span className={'text-[#edf4fe]'}>
                   Далее
               </span>
           </button>
+
       </div>
   );
 }

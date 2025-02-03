@@ -18,6 +18,11 @@ module.exports = {
         'main': '#0b121c',
         'add': '#162336',
       },
+      screens:{
+        'sm': '800px',
+        'md': '1024px',
+        'lg': '1330px'
+      }
     },
   },
   plugins: [],

@@ -5,13 +5,13 @@ import wallet from '../svg/wallet.png'
 
 const Advantages = () => {
   return(
-    <div className={'mt-[4.8rem] relative font-[Roboto] text-[#edf4fe]'}>
+    <div className={'mt-[4.8rem] md:mt-[9.6rem] relative font-[Roboto] text-[#edf4fe]'}>
         <div className={'flex items-center justify-center'}>
-            <h2 className={'text-[22px] font-semibold'}>
+            <h2 className={'text-[22px] md:text-[3.2rem] font-semibold'}>
                 Почему выбирают нас?
             </h2>
         </div>
-        <div className={'flex flex-col gap-[2.4rem] mt-[3.2rem]'}>
+        <div className={'flex flex-col gap-[2.4rem] mt-[3.2rem] md:flex-row'}>
             <div className={'adv-wrapper'}>
                 <div className={'adv-img-wrapper'}>
                     <img className={'adv-img'} src={fast} alt={fast}/>

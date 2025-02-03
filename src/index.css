@@ -18,6 +18,12 @@ html {
     font-size: 10px;
     line-height: normal;
 }
+body{
+    color: #edf4fe;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 120%;
+}
 
 .input-row{
     @apply bg-main rounded-[8px] relative text-black flex justify-between items-center py-[1.2rem] px-[1.6rem] z-10
@@ -27,14 +33,14 @@ html {
 }
 
 .input-main{
-    @apply bg-transparent text-[16px] font-semibold leading-[1.2] text-gray-200 appearance-none focus:outline-none
+    @apply bg-transparent text-[16px] font-semibold leading-[1.2] text-gray-200 appearance-none focus:outline-none md:text-[2.2rem] md:h-full md:w-full
 }
 .input-right{
     @apply text-white right-0 flex items-center bg-add rounded-[16px] cursor-pointer p-[.4rem]
 }
 
 .adv-wrapper{
-    @apply p-[1.6rem] bg-add rounded-[16px] flex flex-col gap-[1.6rem]
+    @apply p-[1.6rem] bg-add rounded-[16px] flex flex-col gap-[1.6rem] md:flex-1 lg:px-[3.2rem]
 }
 .adv-img-wrapper{
     @apply h-[4.8rem] w-[4.8rem]
@@ -43,8 +49,153 @@ html {
     @apply h-full w-full
 }
 .adv-text{
-    @apply font-semibold text-[18px] leading-normal
+    @apply font-semibold text-[18px] leading-[normal] lg:text-[2.2rem]
 }
 .adv-p{
-    @apply text-[#b5b8bc] leading-normal text-[1.2rem] font-normal
+    @apply text-[#b5b8bc] text-[1.2rem] leading-[normal]
 }
+
+.disc-table{
+    @apply pt-[1.5rem]
+}
+.disc-row{
+    @apply py-[1.5rem] border-solid border-b border-[#edf4fe] flex
+}
+.disc-row:first-child{
+    @apply pt-0
+}
+.disc-row:last-child{
+    @apply border-none pb-0
+}
+.disc-cell{
+    @apply text-[12px] w-full md:text-[1.6rem] font-normal
+}
+
+.transaction-first-row{
+    @apply flex flex-col gap-[8px]
+}
+.transaction-first-row-1div{
+    @apply text-[#b5b8bc] text-[1.6rem]
+}
+.transaction-first-row-span{
+    @apply text-[2.2rem] box-border
+}
+.transaction-first-row-right{
+    @apply flex items-center gap-[8px] w-1/2 box-border
+}
+.transaction-first-row-right img{
+    @apply h-[2.8rem] w-[2.8rem]
+}
+.transaction-first-row-right span{
+    @apply text-[1.6rem] font-semibold leading-[120%]
+}
+.btn-active{
+    @apply bg-[#4683df] text-[#edf4fe] cursor-pointer
+}
+.btn-notActive{
+    @apply opacity-20 cursor-not-allowed bg-[#4683df] text-[#edf4fe]
+}
+.accordion{
+    @apply bg-main border border-solid border-[#203c67] cursor-pointer p-[2.4rem] rounded-[16px]
+}
+.trigger{
+    @apply items-center flex gap-[2.4rem] justify-between
+}
+.trigger-h3{
+    @apply text-[16px] font-semibold md:text-[2.2rem]
+}
+.dropdown-trigger{
+    @apply cursor-pointer
+}
+.dropdown-trigger-add{
+    @apply items-center rounded-[50%] flex h-[5rem] w-[5rem] justify-center
+}
+.dropdown-trigger-add-svg{
+    @apply shrink-0 h-[2.4rem] w-[2.4rem]
+}
+.dropdown-content{
+    @apply flex flex-col gap-[1.6rem] max-h-0 overflow-hidden whitespace-pre-wrap opacity-0 pt-0 border-none
+}
+.open{
+    @apply border-t border-solid border-t-[#edf4fe] pt-[2.4rem] max-h-full flex flex-col gap-[1.6rem] overflow-hidden whitespace-pre-wrap opacity-100
+}
+.transition-height{
+    transition: all .3s ease-in-out;
+}
+.dropdown-content-add{
+    @apply box-border
+}
+.dropdown-content-add ol{
+    counter-reset: item;
+}
+.dropdown-content-add li{
+    @apply block mb-[1.6rem] mt-[.8rem] list-none
+}
+.dropdown-content-add ol li::before{
+    color: #4683df;
+    content: counters(item,".") ".";
+    counter-increment: item;
+    padding-right: 5px;
+}
+.dropdown-content-add p{
+    @apply mt-[1.6rem]
+}
+.dropdown-content-add h4{
+    @apply text-[16px] md:text-[1.6rem] font-bold
+}
+
+.link{
+    @apply hover:text-[#4d90f5] hover:duration-300 text-[1.2rem] font-normal text-[#edf4fe]
+}
+
+/* Контейнер прогресс-бара */
+.progress-container {
+    width: 100%;
+    height: 2.4rem;
+    background-color: rgba(0, 0, 0, 0); /* Можно настроить фон контейнера */
+    border-radius: 18px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.progress-bar {
+
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(90deg, rgb(46, 69, 102) 0px, rgb(30, 45, 67) 54.69%, rgb(12, 19, 28) 70%, rgb(46, 69, 102));
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    animation: moveGradient 2s linear infinite;
+
+
+    height: 24px;
+    width: 665px;
+    border-radius: 18px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+/* Анимация перемещения градиента */
+@keyframes moveGradient {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+.status-active{
+    @apply bg-[#4683df] text-white items-center flex rounded-[8px] text-[1.2rem] h-[2.4rem] justify-center leading-[1] w-[2.4rem]
+}
+.status-unactive{
+    @apply bg-[#edf4fe] text-[#4d90f5] items-center flex rounded-[8px] text-[1.2rem] h-[2.4rem] justify-center leading-[1] w-[2.4rem]
+}
+
+
+

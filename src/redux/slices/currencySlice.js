@@ -17,140 +17,18 @@ import litecoin from "../../svg/litecoin.png";
 import monero from "../../svg/monero.png";
 import ruble from "../../svg/ruble.png";
 import lari from "../../svg/lari.png";
+import api from "../../components/Api";
+import {useSelector} from "react-redux";
 
 
 
 export const fetchCurrencyData = createAsyncThunk(
     "currency/FetchCurrencyData",
     async (_, { dispatch }) =>{
-        const data = [
-            {
-                "id": "bitcoin",
-                "symbol": "BTC",
-                "name": "Bitcoin",
-                "priceUsd": "96610.0269279514332719",
-                "type": "coin"
-            },
-            {
-                "id": "ethereum",
-                "symbol": "ETH",
-                "name": "Ethereum",
-                "priceUsd": "3451.2696433917117164",
-                "type": "coin"
-            },
-            {
-                "id": "tether",
-                "symbol": "USDT",
-                "name": "Tether",
-                "priceUsd": "0.9989979809598974",
-                "type": "coin"
-            },
-            {
-                "id": "binance-coin",
-                "symbol": "BNB",
-                "name": "BNB",
-                "priceUsd": "702.2011000499002464",
-                "type": "coin"
-            },
-            {
-                "id": "xrp",
-                "symbol": "XRP",
-                "name": "XRP",
-                "priceUsd": "2.4185961712037480",
-                "type": "coin"
-            },
-            {
-                "id": "solana",
-                "symbol": "SOL",
-                "name": "Solana",
-                "priceUsd": "211.9391309923804886",
-                "type": "coin"
-            },
-            {
-                "id": "dogecoin",
-                "symbol": "DOGE",
-                "name": "Dogecoin",
-                "priceUsd": "0.3422210603034359",
-                "type": "coin"
-            },
-            {
-                "id": "usd-coin",
-                "symbol": "USDC",
-                "name": "USDC",
-                "priceUsd": "0.9995069604215332",
-                "type": "coin"
-            },
-            {
-                "id": "cardano",
-                "symbol": "ADA",
-                "name": "Cardano",
-                "priceUsd": "1.0758804518022084",
-                "type": "coin"
-            },
-            {
-                "id": "tron",
-                "symbol": "TRX",
-                "name": "TRON",
-                "priceUsd": "0.2623663730528061",
-                "type": "coin"
-            },
-            {
-                "id": "avalanche",
-                "symbol": "AVAX",
-                "name": "Avalanche",
-                "priceUsd": "41.1658110718888484",
-                "type": "coin"
-            },
-            {
-                "id": "shiba-inu",
-                "symbol": "SHIB",
-                "name": "Shiba Inu",
-                "priceUsd": "0.0000229507191741",
-                "type": "coin"
-            },
-            {
-                "id": "polkadot",
-                "symbol": "DOT",
-                "name": "Polkadot",
-                "priceUsd": "7.6337107098689503",
-                "type": "coin"
-            },
-            {
-                "id": "litecoin",
-                "symbol": "LTC",
-                "name": "Litecoin",
-                "priceUsd": "106.6380080514354356",
-                "type": "coin"
-            },
-            {
-                "id": "near-protocol",
-                "symbol": "NEAR",
-                "name": "NEAR Protocol",
-                "priceUsd": "5.6087344145822492",
-                "type": "coin"
-            },
-            {
-                "id": "monero",
-                "symbol": "XMR",
-                "name": "Monero",
-                "priceUsd": "204.3314109732098467",
-                "type": "coin"
-            },
-            {
-                "id": "russian-ruble",
-                "symbol": "RUB",
-                "name": "Фиат RUB",
-                "priceUsd": "0.0089292150495812",
-                "type": "fiat"
-            },
-            {
-                "id": "georgian-lari",
-                "symbol": "GEL",
-                "name": "Фиат GEL",
-                "priceUsd": "0.3552397868561279",
-                "type": "fiat"
-            }
-        ]
+
+        const data = await api.get('/coins')
+            .then(response => response.data)
+
         const coinIcons ={
             'bitcoin': bitcoin,
             'ethereum': ethereum,
@@ -178,16 +56,17 @@ export const fetchCurrencyData = createAsyncThunk(
         }));
 
 
+
         dispatch(setCurrencyOptions(updatedData));
 
-        const btc = updatedData.find((currency) => currency.symbol === "BTC");
-        const eth = updatedData.find((currency) => currency.symbol === "ETH");
+        const tempRate = parseFloat(updatedData[0].priceUsd) / parseFloat(updatedData[1].priceUsd)
 
-        const btcToEthRate = parseFloat(btc.priceUsd) / parseFloat(eth.priceUsd)
 
-        dispatch(setFromCurrency(btc))
-        dispatch(setToCurrency(eth))
-        dispatch(setExchangeRate(btcToEthRate))
+
+        dispatch(setFromCurrency(updatedData[0]))
+        dispatch(setToCurrency(updatedData[1]))
+        dispatch(setExchangeRate(tempRate))
+        dispatch(setFromAmount(null))
     }
 )
 
@@ -198,7 +77,13 @@ const initialState = {
     toCurrency: '',
     exchangeRate: null,
     fromAmount: null,
-    toAmount: null
+    toAmount: null,
+    cryptoAddress: '',
+    status: 0,
+    email: '',
+    promocode: '',
+    transactionId: null,
+    burger: false
 }
 
 
@@ -237,8 +122,29 @@ export const currencySlice = createSlice({
             state.exchangeRate = fromCurrencyRate / toCurrencyRate;
 
             [state.toAmount, state.fromAmount] = [state.fromAmount, state.toAmount];
-        }
-
+        },
+        setCryptoAddress(state, action){
+            state.cryptoAddress = action.payload;
+        },
+        setStatus(state, action){
+            state.status = action.payload;
+        },
+        setEmail(state, action){
+            state.email = action.payload;
+        },
+        setPromocode(state, action){
+            state.promocode = action.payload;
+        },
+        setTransactionId(state, action){
+            state.transactionId = action.payload;
+        },
+        resetEmailAndWallet(state) {
+            state.email = '';
+            state.cryptoAddress = '';
+        },
+        setBurger(state){
+            state.burger = !state.burger;
+        },
     },
 })
 
@@ -250,7 +156,14 @@ export const {
     setExchangeRate,
     setFromCurrency,
     setToCurrency,
-    swapCurrencies
+    swapCurrencies,
+    setCryptoAddress,
+    setStatus,
+    setEmail,
+    setPromocode,
+    setTransactionId,
+    resetEmailAndWallet,
+    setBurger
 } = currencySlice.actions
 
 export default currencySlice.reducer
