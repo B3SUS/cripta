@@ -1,7 +1,7 @@
 import logo from '../img/logo.svg'
 const Footer = () => {
     return(
-        <footer className={'py-[48px] font-[Roboto]'}>
+        <footer className={'py-[48px]'}>
             <div className={'px-[16px] flex justify-center'}>
                 <div className={'flex flex-col gap-[.8rem] max-w-[39.2rem] items-center justify-center text-center'}>
                     <img src={logo} alt={logo}/>

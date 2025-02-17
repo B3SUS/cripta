@@ -22,6 +22,9 @@ module.exports = {
         'sm': '800px',
         'md': '1024px',
         'lg': '1330px'
+      },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
       }
     },
   },

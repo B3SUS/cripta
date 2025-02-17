@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    body {
+        @apply font-roboto;
+    }
+}
+
+
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -39,19 +46,19 @@ body{
     @apply text-white right-0 flex items-center bg-add rounded-[16px] cursor-pointer p-[.4rem]
 }
 
-.adv-wrapper{
+.advantages-wrapper{
     @apply p-[1.6rem] bg-add rounded-[16px] flex flex-col gap-[1.6rem] md:flex-1 lg:px-[3.2rem]
 }
-.adv-img-wrapper{
+.advantages-img-wrapper{
     @apply h-[4.8rem] w-[4.8rem]
 }
-.adv-img{
+.advantages-img{
     @apply h-full w-full
 }
-.adv-text{
+.advantages-text{
     @apply font-semibold text-[18px] leading-[normal] lg:text-[2.2rem]
 }
-.adv-p{
+.advantages-p{
     @apply text-[#b5b8bc] text-[1.2rem] leading-[normal]
 }
 

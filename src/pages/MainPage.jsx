@@ -28,7 +28,7 @@ const MainPage = () => {
     }, []);
 
   return(
-    <div className={'flex flex-col bg-main min-h-screen w-screen text-[1.6rem] font-[Roboto] font-normal leading-[120%] text-[#edf4fe] items-center'}>
+    <div className={'flex flex-col bg-main min-h-screen w-screen text-[1.6rem] font-normal leading-[120%] text-[#edf4fe] items-center'}>
         <div className={'flex flex-col items-center box-content gap-[32px] py-[48px] px-[16px] max-w-[1200px] md:py-[9.6rem] md:px-[32px] md:mx-auto lg:gap-0'}>
             <div className={'flex flex-col gap-[32px] justify-between items-center relative w-full lg:flex-row lg:items-start lg:gap-0'}>
                 <div className={'flex flex-col items-center justify-center text-center text-white gap-[1.6rem] w-full md:max-w-[960px] lg:max-w-[57rem] lg:items-start lg:text-left'}>

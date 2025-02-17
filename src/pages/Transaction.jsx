@@ -7,7 +7,7 @@ import {
     setStatus,
     setTransactionId
 } from "../redux/slices/currencySlice";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import copypng from '../svg/copy.png'
 import axios from "axios";
 import api from "../components/Api";
@@ -27,6 +27,14 @@ const Transaction = () => {
         email,
         promocode
     } = useSelector((state)=> state.currency)
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (fromCurrency === ''){
+            navigate('/')
+        }
+    },[])
 
 
 
